@@ -1,40 +1,42 @@
-<div class="modal-content" ng-class="{ 'modal-primary': data.type == 'primary', 'modal-info': data.type == 'info', 'modal-warning': data.type == 'warning', 'modal-danger': data.type == 'danger', 'modal-success': data.type == 'success' }">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()" ng-show="data.closable">
-            <span aria-hidden="true">×</span></button>
-        <h4 class="modal-title">{{ data.title }}</h4>
-    </div>
-    <div class="modal-body">
-        <p>{{ data.message }}</p>
-    </div>
-    <div class="modal-footer">
-        <button
-                type="button"
-                class="btn pull-left"
-                ng-class="{ 'btn-outline': data.type, 'btn-default': !data.type }"
-                data-dismiss="modal"
-                ng-show="data.cancel"
-                ng-click="cancel()"
-                >
-            {{ data.cancel }}
-        </button>
-        <button
-                type="button"
-                class="btn"
-                ng-class="{ 'btn-outline': data.type, 'btn-default': !data.type }"
-                ng-show="data.no"
-                ng-click="no()"
-                >
-            {{ data.no }}
-        </button>
-        <button
-                type="button"
-                class="btn"
-                ng-class="{ 'btn-outline': data.type, 'btn-primary': !data.type }"
-                ng-show="data.ok"
-                ng-click="ok()"
-                >
-            {{ data.ok }}
-        </button>
-    </div>
+<div class="modal-content"
+	 ng-class="{ 'modal-primary': data.type == 'primary', 'modal-info': data.type == 'info', 'modal-warning': data.type == 'warning', 'modal-danger': data.type == 'danger', 'modal-success': data.type == 'success' }">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()"
+				ng-show="data.closable">
+			<span aria-hidden="true">×</span></button>
+		<h4 class="modal-title">{{ data.title }}</h4>
+	</div>
+	<div class="modal-body">
+		<p>{{ data.message }}</p>
+	</div>
+	<div class="modal-footer">
+		<button
+				type="button"
+				class="btn pull-left"
+				ng-class="{ 'btn-outline': data.type, 'btn-default': !data.type }"
+				data-dismiss="modal"
+				ng-show="data.cancel"
+				ng-click="cancel()"
+				>
+			{{ data.cancel }}
+		</button>
+		<button
+				type="button"
+				class="btn"
+				ng-class="{ 'btn-outline': data.type, 'btn-default': !data.type }"
+				ng-show="data.no"
+				ng-click="no()"
+				>
+			{{ data.no }}
+		</button>
+		<button
+				type="button"
+				class="btn"
+				ng-class="{ 'btn-outline': data.type, 'btn-primary': !data.type }"
+				ng-show="data.ok"
+				ng-click="ok()"
+				>
+			{{ data.ok }}
+		</button>
+	</div>
 </div>

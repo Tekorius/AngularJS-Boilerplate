@@ -1,4 +1,4 @@
-angular.module('TekoriusAngularSkeleton.controllers.Main', [])
+angular.module('TekoriusAngularSkeleton')
 
 .controller('MainController',
     function MainController($scope, $rootScope, $uibModal) {

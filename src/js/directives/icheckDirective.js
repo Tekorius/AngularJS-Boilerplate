@@ -1,4 +1,4 @@
-angular.module('TekoriusAngularSkeleton.directives.iCheck', [])
+angular.module('TekoriusAngularSkeleton')
 
 .directive('icheck', function($timeout, $parse) {
     return {

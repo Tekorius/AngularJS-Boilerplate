@@ -1,4 +1,4 @@
-angular.module('TekoriusAngularSkeleton.controllers.Default', [])
+angular.module('TekoriusAngularSkeleton')
 
 .controller('DefaultController',
     function DefaultController($scope, $q, $timeout, Api) {

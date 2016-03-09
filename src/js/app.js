@@ -1,12 +1,8 @@
 angular.module('TekoriusAngularSkeleton', [
     'ui.router',
     'ui.bootstrap',
-    'wysiwyg.module',
-    'TekoriusAngularSkeleton.controllers.Main',
-    'TekoriusAngularSkeleton.controllers.Default',
-    'TekoriusAngularSkeleton.directives.iCheck',
-    'TekoriusAngularSkeleton.directives.SmartTable',
-    'TekoriusAngularSkeleton.services.Api'
+    'smart-table',
+    'wysiwyg.module'
 ])
 
 .run(function() {

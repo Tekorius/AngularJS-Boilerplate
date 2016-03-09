@@ -1,4 +1,4 @@
-angular.module('TekoriusAngularSkeleton.directives.SmartTable', ['smart-table'])
+angular.module('TekoriusAngularSkeleton')
 
 .directive('smartTable',
     function SmartTableDirective() {

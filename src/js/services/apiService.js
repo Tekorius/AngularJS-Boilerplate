@@ -1,4 +1,4 @@
-angular.module('TekoriusAngularSkeleton.services.Api', [])
+angular.module('TekoriusAngularSkeleton')
 
 .provider('Api', [ApiProvider]);
 

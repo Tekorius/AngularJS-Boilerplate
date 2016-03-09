@@ -23,10 +23,11 @@ var gulp                    = require('gulp'),                              // m
 	sequence                = require('run-sequence'),                      // temporary solution to run tasks in order
 	watch                   = require('gulp-watch'),
 	LessPluginCleanCSS      = require('less-plugin-clean-css'),
-	cleancss = new LessPluginCleanCSS({advanced: true}),
+	lesscleancss = new LessPluginCleanCSS({advanced: true}),
+	cleancss                = require('gulp-clean-css'),
 	server                  = require('gulp-webserver'),                    // server
 	livereload              = require('gulp-livereload'),
-	merge                   = require('merge-stream'),                      // merge streams
+	merge                   = require('merge2'),                      // merge streams
 	ftp                     = require('vinyl-ftp'),                         // ftp deployment
 	streamqueue             = require('streamqueue');
 
@@ -45,9 +46,6 @@ gulp.task('cleanImages', function () {
 });
 gulp.task('cleanTemplates', function () {
 	return del(config.distDir + '/template*')
-});
-gulp.task('cleanTemp', function () {
-	return del('./.tmp')
 });
 
 gulp.task('buildIndex', function () {
@@ -115,29 +113,16 @@ gulp.task('buildVendorJS', function () {
 
 gulp.task('buildVendorCSS', function () {
 
-	var cssStream = streamqueue({objectMode: true},
-			//gulp.src( vendor.ext('css').files ),
-			gulp.src(vendor.css)
-		)
-			.pipe(concat('vendor-css.css'))
-			.pipe(gulp.dest('./.tmp'))
-		;
+	var lessStream = gulp.src(vendor.less)
+		.pipe(sourcemaps.init())
+		.pipe(less());
 
-	var lessStream = streamqueue({objectMode: true},
-			//gulp.src( vendor.ext('less').files ),
-			gulp.src(vendor.less)
-		)
-			.pipe(less({
-				plugins: [cleancss]
-			}))
-			.pipe(concat('vendor-less.css'))
-			.pipe(gulp.dest('./.tmp'))
-		;
+	var cssStream = gulp.src(vendor.css)
+		.pipe(sourcemaps.init());
 
 	return merge(lessStream, cssStream)
-		.pipe(sourcemaps.init({loadMaps: true}))
 		.pipe(concat('vendor.css'))
-		.pipe(uglifycss())
+		.pipe(cleancss({processImportFrom: ['!fonts.googleapis.com']}))
 		.pipe(rev())
 		.pipe(sourcemaps.write('.'))
 		.pipe(gulp.dest(config.distDir))
@@ -184,7 +169,7 @@ gulp.task('buildCSS', function () {
 	return gulp.src(config.sourceDir + '/less/app.less')
 		.pipe(sourcemaps.init())
 		.pipe(less({
-			plugins: [cleancss]
+			plugins: [lesscleancss]
 		}))
 		.pipe(rev())
 		.pipe(sourcemaps.write('.'))
@@ -246,7 +231,7 @@ gulp.task('ftpUpload', function () {
 // single tasks
 gulp.task('index', ['buildIndex']);
 gulp.task('vendor', function (callback) {
-	sequence('cleanVendor', ['buildVendorJS', 'buildVendorCSS', 'buildVendorFonts', 'buildVendorImages'], 'buildIndex', 'cleanTemp', 'server:restart', callback)
+	sequence('cleanVendor', ['buildVendorJS', 'buildVendorCSS', 'buildVendorFonts', 'buildVendorImages'], 'buildIndex', 'server:restart', callback)
 });
 gulp.task('js', function (callback) {
 	sequence('cleanJS', 'buildJS', 'buildIndex', 'server:restart', callback)
@@ -266,7 +251,7 @@ gulp.task('build', function (callback) {
 	sequence(
 		['cleanVendor', 'cleanJS', 'cleanCSS', 'cleanTemplates', 'cleanImages'],
 		['buildVendorJS', 'buildVendorCSS', 'buildVendorImages', 'buildVendorFonts', 'buildJS', 'buildCSS', 'buildTemplates', 'buildImages'],
-		['buildIndex', 'cleanTemp'],
+		'buildIndex',
 		callback)
 });
 

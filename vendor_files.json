@@ -14,7 +14,6 @@
 		"./bower_components/angular-smart-table/dist/smart-table.js"
 	],
 	"css": [
-		"./bower_components/bootstrap/dist/css/bootstrap.css",
 		"./bower_components/AdminLTE/dist/css/AdminLTE.css",
 		"./bower_components/AdminLTE/dist/css/skins/skin-black-light.css",
 		"./bower_components/AdminLTE/dist/css/skins/skin-blue.css",
@@ -23,6 +22,7 @@
 		"./bower_components/angular-bootstrap-colorpicker/css/colorpicker.css"
 	],
 	"less": [
+		"./bower_components/bootstrap/less/bootstrap.less"
 	],
 	"fonts": [
 		"./bower_components/bootstrap/dist/fonts/*",

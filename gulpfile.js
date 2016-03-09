@@ -1,55 +1,8 @@
 'use strict';
 
 /*================== Config ===============*/
-var config = {
-    module: 'TekoriusAngularSkeleton',
-    sourceDir: './src',
-    distDir: './dist',
-    vendor: {
-        js: [
-            './bower_components/jquery/dist/jquery.js',
-            './bower_components/angular/angular.js',
-            './bower_components/bootstrap/dist/js/bootstrap.js',
-            './bower_components/angular-ui-router/angular-ui-router.js',
-            './bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
-            './bower_components/angular-ui-router/release/angular-ui-router.js',
-            './bower_components/AdminLTE/dist/js/app.js',
-            './bower_components/AdminLTE/plugins/slimScroll/jquery.slimscroll.js',
-            './bower_components/AdminLTE/plugins/iCheck/icheck.js',
-            './bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js',
-            './bower_components/angular-wysiwyg/dist/angular-wysiwyg.js',
-            './bower_components/angular-smart-table/dist/smart-table.js'
-        ],
-        css: [
-            './bower_components/bootstrap/dist/css/bootstrap.css',
-            './bower_components/AdminLTE/dist/css/AdminLTE.css',
-            './bower_components/AdminLTE/dist/css/skins/skin-black-light.css', // You can change to your skin here
-            './bower_components/AdminLTE/dist/css/skins/skin-blue.css',
-            './bower_components/font-awesome/css/font-awesome.css',
-            './bower_components/AdminLTE/plugins/iCheck/minimal/blue.css',
-            './bower_components/angular-bootstrap-colorpicker/css/colorpicker.js'
-        ],
-        less: [
-        ],
-        fonts: [
-            './bower_components/bootstrap/dist/fonts/*',
-            './bower_components/font-awesome/fonts/*'
-        ],
-        templates: [
-        ],
-        images: [
-            './bower_components/AdminLTE/plugins/iCheck/minimal/blue*.png',
-            './bower_components/dropzone/downloads/images/*',
-            './bower_components/angular-bootstrap-colorpicker/img/*'
-        ]
-    },
-	ftp: {
-		host: 'ftphost',
-		user: 'user@ftphost',
-		password: 'password',
-		dir: '/angularskeleton'
-	}
-};
+var config = require('./config.json');
+var vendor = require('./vendor_files.json');
 
 /*================= Requires ==============*/
 var gulp              = require('gulp'),                              // main gulp plugin
@@ -73,7 +26,7 @@ var gulp              = require('gulp'),                              // main gu
     cleancss          = new LessPluginCleanCSS({ advanced: true}),
     server            = require('gulp-webserver'),                    // server
     livereload        = require('gulp-livereload'),
-    vendor            = require('bower-files')(),                     // vendor files
+    //vendor            = require('bower-files')(),                     // vendor files
     merge             = require('merge-stream'),                      // merge streams
 	ftp               = require('vinyl-ftp'),                         // ftp deployment
     streamqueue       = require('streamqueue');
@@ -137,8 +90,7 @@ gulp.task('buildImages', function() {
 gulp.task('buildVendorJS', function() {
 
     return streamqueue({ objectMode: true },
-        //gulp.src( vendor.ext('js').files ),
-        gulp.src( config.vendor.js )
+        gulp.src( vendor.js )
     ).pipe( sourcemaps.init({ loadMaps: true }) )
         .pipe( concat('vendor.js') )
         .pipe( uglify({
@@ -154,7 +106,7 @@ gulp.task('buildVendorCSS', function() {
 
     var cssStream = streamqueue({ objectMode: true },
             //gulp.src( vendor.ext('css').files ),
-            gulp.src( config.vendor.css )
+            gulp.src( vendor.css )
         )
             .pipe( concat('vendor-css.css') )
             .pipe( gulp.dest( './.tmp' ) )
@@ -162,7 +114,7 @@ gulp.task('buildVendorCSS', function() {
 
     var lessStream = streamqueue({ objectMode: true },
             //gulp.src( vendor.ext('less').files ),
-            gulp.src( config.vendor.less )
+            gulp.src( vendor.less )
         )
             .pipe( less({
                 plugins: [cleancss]
@@ -183,7 +135,7 @@ gulp.task('buildVendorCSS', function() {
 gulp.task('buildVendorImages', function() {
     return streamqueue({ objectMode: true },
         //gulp.src( vendor.ext(['gif', 'png', 'jpg', 'jpeg']).files ),
-        gulp.src( config.vendor.images ))
+        gulp.src( vendor.images ))
         .pipe(changed( config.distDir + '/images' ))
         .pipe(imagemin({
             optimizationLevel: 3,
@@ -196,7 +148,7 @@ gulp.task('buildVendorImages', function() {
 gulp.task('buildVendorFonts', function() {
     return streamqueue({ objectMode: true },
         //gulp.src( vendor.ext(['woff2', 'woff', 'ttf']).files ),
-        gulp.src( config.vendor.fonts )
+        gulp.src( vendor.fonts )
     )
         .pipe( gulp.dest( config.distDir + '/fonts' ) );
 });
@@ -246,9 +198,9 @@ gulp.task('buildTemplates', function() {
 gulp.task('watch', function() {
     watch( config.sourceDir + '/bower_components/**/*', { name: 'vendor' }, function() { gulp.start('vendor'); } );
     watch( config.sourceDir + '/js/**/*', { name: 'js' }, function() { gulp.start('js'); } );
-    //watch( config.sourceDir + '/less/**/*', { name: 'css' }, function() { gulp.start('css'); } );
+    watch( config.sourceDir + '/less/**/*', { name: 'css' }, function() { gulp.start('css'); } );
     watch( config.sourceDir + '/html/**/*', { name: 'template' }, function() { gulp.start('template'); } );
-    //watch( config.sourceDir + '/images/**/*', { name: 'images' }, function() { gulp.start('images'); } );
+    watch( config.sourceDir + '/images/**/*', { name: 'images' }, function() { gulp.start('images'); } );
     watch( config.sourceDir + '/index.html', { name: 'index' }, function() { gulp.start('index'); } );
 });
 
@@ -262,7 +214,7 @@ gulp.task('ftpUpload', function() {
 		log: 'gutil.log'
 	});
 
-	return gulp.src(config.distDir + '/**', { buffer: false })
+	return gulp.src([config.distDir + '/**', '!' + config.distDir + '/*.map'], { buffer: false })
 		.pipe( conn.newer(config.ftp.dir) )
 		.pipe( conn.dest(config.ftp.dir) );
 });

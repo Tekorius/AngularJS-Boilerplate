@@ -1,0 +1,11 @@
+{
+	"module": "TekoriusAngularSkeleton",
+	"sourceDir": "./src",
+	"distDir": "./dist",
+	"ftp": {
+		"host": "ftphost",
+		"user": "user@ftphost",
+		"password": "password",
+		"dir": "/angularskeleton"
+	}
+}

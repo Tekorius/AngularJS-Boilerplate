@@ -7,7 +7,7 @@ angular.module('TekoriusAngularSkeleton.directives.SmartTable', ['smart-table'])
             templateUrl: 'list_table.html',
             scope: {
                 //endpoint: '=api',
-                //result: '=',
+                result: '=',
                 //loading: '=',
                 config: '='
             },
@@ -37,7 +37,9 @@ angular.module('TekoriusAngularSkeleton.directives.SmartTable', ['smart-table'])
                             $scope.config.delete(item);
                         }
                         else {
-                            $rootScope.confirm();
+                            $rootScope.confirm().then(function(item) {
+								$scope.config.deleteCallback(item);
+							});
                         }
                     };
 

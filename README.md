@@ -42,6 +42,7 @@ This boilerplate uses Gulp as a builder, to build distribution files, therefore 
 - [x] Popup modals
 - [ ] Fixed alerts with auto hide
 - [ ] Form boilerplate
+- [ ] Table column filters (such as currency, etc)
 - [ ] Remove smart table
 - [ ] Add tables sorting
 - [ ] Table templating

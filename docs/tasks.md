@@ -10,6 +10,8 @@ This boilerplate includes these Gulp tasks:
     * `images` - minifies and moves images to dist
     * `css` - builds less in src/less. Outputs app-*.css
     * `template` - takes templates in src/html and puts them inside angular template cache format for faster loading. Outputs templates-*.js
+    * `ftpUpload` - uploads dist folder to ftp without building
+    * `ftp` - runs build task and then uploads dist folder to configured ftp
     
 Resulting vendor and app scripts are appended with a sha fingerprint to avoid caching on user's end should you change anything.    
 

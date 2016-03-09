@@ -36,7 +36,8 @@
     "less-plugin-clean-css": "^1.5.1",
     "merge-stream": "^1.0.0",
     "run-sequence": "^1.1.5",
-    "streamqueue": "^1.1.1"
+    "streamqueue": "^1.1.1",
+    "vinyl-ftp": "^0.4.5"
   },
   "engines": {
     "node": ">=0.10.0"

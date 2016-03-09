@@ -26,6 +26,7 @@
     "jquery": "^2.2.1",
     "font-awesome": "^4.5.0",
     "angular-wysiwyg": "^1.2.4",
-    "angular-smart-table": "^2.1.7"
+    "angular-smart-table": "^2.1.7",
+    "lodash": "^4.6.1"
   }
 }

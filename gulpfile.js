@@ -22,7 +22,6 @@ var config = {
         ],
         css: [
             './bower_components/bootstrap/dist/css/bootstrap.css',
-            //'./bower_components/bootstrap/dist/css/bootstrap-theme.css',
             './bower_components/AdminLTE/dist/css/AdminLTE.css',
             './bower_components/AdminLTE/dist/css/skins/skin-black-light.css', // You can change to your skin here
             './bower_components/AdminLTE/dist/css/skins/skin-blue.css',
@@ -43,7 +42,13 @@ var config = {
             './bower_components/dropzone/downloads/images/*',
             './bower_components/angular-bootstrap-colorpicker/img/*'
         ]
-    }
+    },
+	ftp: {
+		host: 'ftphost',
+		user: 'user@ftphost',
+		password: 'password',
+		dir: '/angularskeleton'
+	}
 };
 
 /*================= Requires ==============*/
@@ -70,6 +75,7 @@ var gulp              = require('gulp'),                              // main gu
     livereload        = require('gulp-livereload'),
     vendor            = require('bower-files')(),                     // vendor files
     merge             = require('merge-stream'),                      // merge streams
+	ftp               = require('vinyl-ftp'),                         // ftp deployment
     streamqueue       = require('streamqueue');
 
 /*================ Clean =================*/
@@ -246,20 +252,38 @@ gulp.task('watch', function() {
     watch( config.sourceDir + '/index.html', { name: 'index' }, function() { gulp.start('index'); } );
 });
 
+/*=================== FTP =====================*/
+gulp.task('ftpUpload', function() {
+	var conn = ftp.create({
+		host: config.ftp.host,
+		user: config.ftp.user,
+		password: config.ftp.password,
+		parallel: 10,
+		log: 'gutil.log'
+	});
+
+	return gulp.src(config.distDir + '/**', { buffer: false })
+		.pipe( conn.newer(config.ftp.dir) )
+		.pipe( conn.dest(config.ftp.dir) );
+});
+
 /*================ Tasks =======================*/
 // single tasks
 gulp.task('index', ['buildIndex']);
-gulp.task('vendor', function() { sequence('cleanVendor', ['buildVendorJS', 'buildVendorCSS', 'buildVendorFonts', 'buildVendorImages'], 'buildIndex', 'cleanTemp', 'server:restart') } );
-gulp.task('js', function() { sequence('cleanJS', 'buildJS', 'buildIndex', 'server:restart') } );
-gulp.task('images', function() { sequence('cleanImages', 'buildImages', 'server:restart') } );
-gulp.task('css', function() { sequence('cleanCSS', 'buildCSS', 'buildIndex', 'server:restart') } );
-gulp.task('template', function() { sequence('cleanTemplates', 'buildTemplates', 'buildIndex', 'server:restart') } );
+gulp.task('vendor', function(callback) { sequence('cleanVendor', ['buildVendorJS', 'buildVendorCSS', 'buildVendorFonts', 'buildVendorImages'], 'buildIndex', 'cleanTemp', 'server:restart', callback) } );
+gulp.task('js', function(callback) { sequence('cleanJS', 'buildJS', 'buildIndex', 'server:restart', callback) } );
+gulp.task('images', function(callback) { sequence('cleanImages', 'buildImages', 'server:restart', callback) } );
+gulp.task('css', function(callback) { sequence('cleanCSS', 'buildCSS', 'buildIndex', 'server:restart', callback) } );
+gulp.task('template', function(callback) { sequence('cleanTemplates', 'buildTemplates', 'buildIndex', 'server:restart', callback) } );
 
 // build
-gulp.task('build', function() { sequence(
+gulp.task('build', function(callback) { sequence(
     ['cleanVendor', 'cleanJS', 'cleanCSS', 'cleanTemplates', 'cleanImages'],
-    ['buildVendorJS', 'buildVendorCSS', 'buildVendorImages', 'buildJS', 'buildCSS', 'buildTemplates', 'buildImages'],
-    ['buildIndex', 'cleanTemp']) } );
+    ['buildVendorJS', 'buildVendorCSS', 'buildVendorImages', 'buildVendorFonts', 'buildJS', 'buildCSS', 'buildTemplates', 'buildImages'],
+    ['buildIndex', 'cleanTemp'],
+	callback) } );
+
+gulp.task('ftp', function(callback) { sequence('build', 'ftpUpload', callback) });
 
 
 // server

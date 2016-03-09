@@ -1,0 +1,70 @@
+<div class="row">
+    <div class="col-md-4 col-sm-12 form-inline" ng-show="config.showLimit">
+        <label for="listLimit">Limit results: </label>
+        <select
+                class="form-control"
+                ng-model="config.limit"
+                ng-change="callServer()"
+                ng-options="lim for lim in config.limits"
+                id="listLimit"
+                >
+        </select>
+    </div>
+    <div ng-class="{ 'col-md-offset-4': config.showLimit, 'col-md-offset-8': !config.showLimit }" class="col-sm-offset-0 col-md-4 col-sm-12" ng-show="config.showSearch">
+        <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+            <input type="search" class="form-control" ng-change="callServer()" ng-model="config.search" ng-model-options="{ debounce: 400 }">
+        </div>
+    </div>
+</div>
+<div ng-class="{ 'table-responsive': config.responsive }">
+    <table st-pipe="callServer" st-table="result.result" class="table table-bordered table-striped table-hover">
+        <thead>
+        <tr>
+            <th ng-repeat="col in config.columns">{{ col.display }}</th>
+            <th style="width: 150px" ng-show="config.buttons"></th>
+        </tr>
+        </thead>
+        <tbody ng-show="!result.result || result.result.length == 0">
+        <tr>
+            <td colspan="{{ config.columns.length + (config.buttons ? 1 : 0) }}">No data</td>
+        </tr>
+        </tbody>
+        <tbody ng-show="result.result.length > 0">
+        <tr ng-repeat="item in result.result">
+            <td ng-repeat="col in config.columns">{{ item[col.name] }}</td>
+            <td ng-show="config.buttons">
+                <a ng-click="details(item)" class="btn btn-default btn-sm" ng-show="config.details">
+                    <i class="fa fa-list-alt"></i>
+                </a>
+                <a ng-click="edit(item)" class="btn btn-default btn-sm" ng-show="config.edit">
+                    <i class="fa fa-pencil"></i>
+                </a>
+                <button ng-click="remove(item)" class="btn btn-danger btn-sm" ng-show="config.delete">
+                    <i class="fa fa-times"></i>
+                </button>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th ng-repeat="col in config.columns">{{ col.display }}</th>
+            <th ng-show="config.buttons"></th>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-5 text-center-sm text-center-xs">Total results {{ result.count }}</div>
+    <div class="col-sm-12 col-md-7 text-right text-center-sm text-center-xs">
+        <uib-pagination
+                total-items="result.count"
+                ng-model="config.page"
+                ng-change="callServer()"
+                max-size="5"
+                class="pagination-sm"
+                boundary-link-numbers="true"
+                rotate="true">
+        </uib-pagination>
+    </div>
+</div>

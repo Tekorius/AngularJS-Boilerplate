@@ -1,0 +1,31 @@
+{
+  "name": "client",
+  "description": "AngularJS client",
+  "main": "dist/index.html",
+  "authors": [
+    "Rytis Tekorius <rytis@tekorius.com>"
+  ],
+  "license": "ISC",
+  "moduleType": [],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.0",
+    "angular-animate": "^1.5.0",
+    "bootstrap": "^3.3.6",
+    "angular-bootstrap": "^1.2.3",
+    "angular-ui-router": "^0.2.18",
+    "AdminLTE": "admin-lte#^2.3.2",
+    "jquery": "^2.2.1",
+    "font-awesome": "^4.5.0",
+    "angular-wysiwyg": "^1.2.4",
+    "angular-smart-table": "^2.1.7"
+  }
+}

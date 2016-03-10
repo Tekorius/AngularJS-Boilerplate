@@ -90,7 +90,6 @@ function ApiService($http, $q, $state, $rootScope, $timeout, config) {
 			else if (response.status == 401) {
 				alert('Please relog');
 				svc.connectedUser = null;
-				svc.selectedEvent = null;
 				$state.go('login');
 			}
 			// not allowed

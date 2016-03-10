@@ -23,17 +23,17 @@ This boilerplate uses Gulp as a builder, to build distribution files, therefore 
 1. Clone or fork this repository to your project folder
 2. Install node modules used by Gulp. This will take a while, so grab a coffee or something
 
-    `npm install`
+        npm install
     
 3. Next you need to install your frontend dependencies with Bower
 
-    `bower install`
+        bower install
     
 4. After installing all dependencies your are ready to build
 
-    `gulp`
-    
-    This will create a `dist` folder and launch a local server with auto refresh. You can check all the tasks [here] or inside [gulpfile.js](gulpfile.js)
+        gulp
+
+    This will create a `dist` folder and launch a local server with auto refresh. You can check all the tasks [here](docs/tasks.md) or inside [gulpfile.js](gulpfile.js)
 
 ## Checklist ##
 
